@@ -16,8 +16,6 @@ function afficherProduit(div, product) {
 
 	// pour product.id il manquait le _ !!!!
 
-	//instruction couleur
-	//TODO: mettre couleurs ?
 	// <h4> Couleurs: <br> ${product.colors[0]} <br>  ${product.colors[1]} <br> ${product.colors[2]}</h4>
 
 
