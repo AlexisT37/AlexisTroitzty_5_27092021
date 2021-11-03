@@ -24,7 +24,7 @@ fetch("http://localhost:3000/api/products/order", options)
     .then((data) => {
         localStorage.clear();
         console.log(data);
-        localStorage.setItem("orderId", "107fb5b75607497b96722bda5b504926");
+        localStorage.setItem("orderId", "test");
         localStorage.setItem("total", "7777 ");
 
     })

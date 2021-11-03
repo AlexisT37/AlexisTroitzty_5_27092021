@@ -24,8 +24,6 @@ if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0
   //! console.log("Je suis vide");
   document.querySelector("#panierVide").style.display = 'flex';
 
-
-
 } else {
   //! console.log("je suis rempli");
   document.querySelector("#panierVide").style.display = 'none';
@@ -63,9 +61,7 @@ if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0
   }
 }
 
-
 /* ******************************AFFICHAGE PANIER FIN****************************** */
-
 
 /* ******************************BOUTON SUPPRIMER DEBUT****************************** */
 // selection bouton supprimer avec la classe deleteItem
@@ -117,36 +113,11 @@ boutonSupprimer.addEventListener("click", (event) => {
 
 /* ******************************BOUTON VIDER LE PANIER FIN****************************** */
 
-/* ******************************CALCULER LA SOMME TOTALE DES PRIX DEBUT****************************** */
-/* variable pour total */
-let totalPanier = []; /* declarer un array vide */
-for (let indexSommePannier = 0; indexSommePannier < produitEnregistreLocalStorage.length; indexSommePannier++) {
-  /* boucle qui parcourt localstorage */
-  let prixProdPanier = produitEnregistreLocalStorage[indexSommePannier].prixProduit; /* declarer variable du prix */
-  totalPanier.push(prixProdPanier); /* pousser variable du prix a la fin de l'array totalPanier */
-}
-
-
-/* faire la somme des prix */
-const reduire = (accumulateur, valeurCourrante) => accumulateur + valeurCourrante;
-const PrixSommePannier = totalPanier.reduce(reduire, 0);
-
-
-// !console.log(PrixSommePannier);
-// !console.log(totalPanier);
-
-
-/* afficher la somme dans cart.html */
-const prixHtml = document.querySelector("#totalPrice")
-prixHtml.textContent = `${((PrixSommePannier)).toString()}`;
-
-
-/* ******************************CALCULER LA SOMME TOTALE DES PRIX FIN****************************** */
-
 /* ******************************CALCULER LA SOMME TOTALE DES QUANTITES DEBUT****************************** */
 
 
 let totalQuantité = []; /* declarer un array vide */
+console.log("totalQuantité : " + totalQuantité);
 
 /* retrouver la valeur dans le local storage */
 for (let indexSommeQuantité = 0; indexSommeQuantité < produitEnregistreLocalStorage.length; indexSommeQuantité++) {
@@ -160,18 +131,49 @@ for (let indexSommeQuantité = 0; indexSommeQuantité < produitEnregistreLocalSt
 const reduireQuantité = (AccQuantité, ValeurCourrQuantité) => AccQuantité + ValeurCourrQuantité;
 const QuantitéSommePannier = totalQuantité.reduce(reduireQuantité, 0);
 
-
-// !console.log(PrixSommePannier);
-// !console.log(totalPanier);
-
+console.log("reduireQuantité : " + reduireQuantité);
+console.log("QuantitéSommePannier : " + QuantitéSommePannier);
 
 /* afficher la somme des quantités dans cart.html */
 const quantitéHtml = document.querySelector("#totalQuantity")
 quantitéHtml.textContent = QuantitéSommePannier;
 
+console.log("quantitéHtml : " + quantitéHtml);
+
+
 
 
 /* ******************************CALCULER LA SOMME TOTALE DES QUANTITES FIN****************************** */
+
+
+/* ******************************CALCULER LA SOMME TOTALE DES PRIX DEBUT****************************** */
+/* variable pour total */
+let totalPanier = []; /* declarer un array vide */
+for (let indexSommePannier = 0; indexSommePannier < produitEnregistreLocalStorage.length; indexSommePannier++) {
+  /* boucle qui parcourt localstorage */
+  // let prixProdPanier = produitEnregistreLocalStorage[indexSommePannier].prixProduit; /* declarer variable du prix */
+  let prixProdPanier = (produitEnregistreLocalStorage[indexSommePannier].prixProduit) * produitEnregistreLocalStorage[indexSommePannier].quantiteProduit; /* declarer variable du prix */
+  totalPanier.push(prixProdPanier); /* pousser variable du prix a la fin de l'array totalPanier */
+}
+
+
+/* faire la somme des prix */
+const reduire = (accumulateur, valeurCourrante) => accumulateur + valeurCourrante;
+console.log("reduire : " + reduire);
+const PrixSommePannier = totalPanier.reduce(reduire, 0);
+console.log("PrixSommePannier : " + PrixSommePannier);
+
+// !console.log(PrixSommePannier);
+// !console.log(totalPanier);
+
+
+/* afficher la somme dans cart.html */
+const prixHtml = document.querySelector("#totalPrice")
+prixHtml.textContent = `${((PrixSommePannier)).toString()}`;
+
+
+/* ******************************CALCULER LA SOMME TOTALE DES PRIX FIN****************************** */
+
 
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER DEBUT****************************** */
@@ -363,28 +365,34 @@ commandeCart.addEventListener("click", (event) => {
 
   if (!document.querySelector("#firstName").value) {
     alert("Entrez un prénom avant de valider")
+
     ////console.log(document.querySelector("#firstName").value);
   } else if (!document.querySelector("#lastName").value) {
     alert("Entrez un nom de famille avant de valider")
 
+
   } else if (!document.querySelector("#address").value) {
     alert("Entrez une adresse avant de valider")
+
 
   } else if (!document.querySelector("#city").value) {
     alert("Entrez un nom de ville avant de valider")
 
+
   } else if (!document.querySelector("#email").value) {
     alert("Entrez une adresse email avant de valider")
 
+
   } else {
     faireObjetcontact();
+    /* Passer a la confirmation */
+    window.location.href = "confirmation.html";
+    console.log("hello mouchi");
+    console.table(produitEnregistreLocalStorage);
   }
 
 
-  /* Passer a la confirmation */
-  window.location.href = "confirmation.html";
-  console.log("hello mouchi");
-  console.table(produitEnregistreLocalStorage);
+
 
 
 });
