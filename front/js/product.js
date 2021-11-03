@@ -56,7 +56,7 @@ const ajoutPanier = document.querySelector("#addToCart");
 ajoutPanier.addEventListener("click", (event) => {
 
 
-    /* empecher comportement defaut bouton */
+
 
     const formulaire = document.querySelector("#colors"); /* selection liste couleurs */
     // //console.log(formulaire);
@@ -85,35 +85,77 @@ ajoutPanier.addEventListener("click", (event) => {
         }
     }
 
+    // couleurDefaut = document.querySelector("#colors option");
+    // testcouleur = couleurDefaut.value;
+    // console.log("testcouleur : " + testcouleur);
+
+
     // verification de validité du nombre d'article
     if ((typeof quantiteProduitInt) === "number" && quantiteProduitInt % 1 === 0) {
         /* le typeof est numeber et c'est un integer, pas un float */
         if (quantiteProduitInt <= 100 && quantiteProduitInt >= 1) {
             console.log("C'est le bon format de prix");
             confirmPopup();
+            /*-------------------- SECTION LOCAL STORAGE------------- */
+
+            //// console.log(id);
+            prixProduit = document.querySelector("#price").textContent; /* séléctionner id pour prix */
+            // //console.log(prixProduit);
+            /*--- CREATION OBJET a envoyer au serveur plus tard */
+
+            ////console.log("quantiteProduitInt");
+            ////console.log(quantiteProduitInt);
+
+            let proprietesProduit = {
+                /* creer objet js avec 4 propriétés */
+                couleurProduit: couleurValue,
+                prixProduit: (parseInt((document.querySelector("#price").textContent))),
+                quantiteProduit: quantiteProduitInt,
+                idproduit: id,
+                titreCanapé: titreProductContent
+
+            };
+
+            //// console.log(localStorage.getItem("produit"));
+            //// console.log(typeof localStorage.getItem("produit"));
+            let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit")); /* creer objet js */
+            //// console.log(produitEnregistreLocalStorage);
+
+            /* fonction pour ajouter un produit dans le localStorage */
+            const addProduitLocalStorage = () => {
+                /* add user selected values in the array */
+                produitEnregistreLocalStorage.push(proprietesProduit);
+                /* add array to local storage as a JSON string */
+                localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
+            };
+
+            // cas ou produit deja existant
+            if (produitEnregistreLocalStorage) {
+                /* si il y a produitEnregistreLocalStorage */
+                //// console.log("on a un truc dans le storage"); /* afficher message validation */
+                //// produitEnregistreLocalStorage.push(proprietesProduit); /* mettre les propriétés à la fin de l'array */
+                //// localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /*convertir l'objet js en JSON */
+                //// console.log(produitEnregistreLocalStorage);
+                addProduitLocalStorage();
+
+
+                //* cas ou pas de produit
+            } else {
+                produitEnregistreLocalStorage = []; /* comme il n'y a pas d'array on le crée */
+                //// console.log(produitEnregistreLocalStorage);
+                //// produitEnregistreLocalStorage.push(proprietesProduit); /* mettre les propriétés à la fin de l'array */
+                //// localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /*convertirjs en JSON */
+                //// console.log(produitEnregistreLocalStorage);
+                addProduitLocalStorage();
+            }
+
         } else {
-            alert("Rentrez un nombre correct s'il vous plait")
+            alert("Rentrez un nombre correct et ne laissez pas la couleur par défaut s'il vous plait")
             event.preventDefault();
         }
     }
 
-    //// console.log(id);
-    prixProduit = document.querySelector("#price").textContent; /* séléctionner id pour prix */
-    // //console.log(prixProduit);
-    /*--- CREATION OBJET a envoyer au serveur plus tard */
 
-    ////console.log("quantiteProduitInt");
-    ////console.log(quantiteProduitInt);
-
-    let proprietesProduit = {
-        /* creer objet js avec 4 propriétés */
-        couleurProduit: couleurValue,
-        prixProduit: (parseInt((document.querySelector("#price").textContent))),
-        quantiteProduit: quantiteProduitInt,
-        idproduit: id,
-        titreCanapé: titreProductContent
-
-    };
     // //console.log(proprietesProduit);
     // //TODO verifier la couleur
     // /* fonction pour verifier s'il s'agit d'un produit de même couleur */
@@ -127,40 +169,6 @@ ajoutPanier.addEventListener("click", (event) => {
     //     }
     // }
 
-    /*-------------------- SECTION LOCAL STORAGE------------- */
-
-    //// console.log(localStorage.getItem("produit"));
-    //// console.log(typeof localStorage.getItem("produit"));
-    let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit")); /* creer objet js */
-    //// console.log(produitEnregistreLocalStorage);
-
-    /* fonction pour ajouter un produit dans le localStorage */
-    const addProduitLocalStorage = () => {
-        /* add user selected values in the array */
-        produitEnregistreLocalStorage.push(proprietesProduit);
-        /* add array to local storage as a JSON string */
-        localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
-    };
-
-    // cas ou produit deja existant
-    if (produitEnregistreLocalStorage) {
-        /* si il y a produitEnregistreLocalStorage */
-        //// console.log("on a un truc dans le storage"); /* afficher message validation */
-        //// produitEnregistreLocalStorage.push(proprietesProduit); /* mettre les propriétés à la fin de l'array */
-        //// localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /*convertir l'objet js en JSON */
-        //// console.log(produitEnregistreLocalStorage);
-        addProduitLocalStorage();
-
-
-        //* cas ou pas de produit
-    } else {
-        produitEnregistreLocalStorage = []; /* comme il n'y a pas d'array on le crée */
-        //// console.log(produitEnregistreLocalStorage);
-        //// produitEnregistreLocalStorage.push(proprietesProduit); /* mettre les propriétés à la fin de l'array */
-        //// localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /*convertirjs en JSON */
-        //// console.log(produitEnregistreLocalStorage);
-        addProduitLocalStorage();
-    }
 
 
 
