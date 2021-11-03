@@ -12,20 +12,18 @@ document.querySelector("#cityCheckMsg").style.display = 'none';
 document.querySelector("#emailErrorMsg").style.display = 'none';
 document.querySelector("#emailCheckMsg").style.display = 'none';
 
-/* cas ou le panier est vide */
+
 
 /* ******************************AFFICHAGE PANIER DEBUT****************************** */
 
 const contenuPanier = document.querySelector("#cart__items")
 //! console.log(contenuPanier);
 
-
+/* cas ou le panier est vide */
 if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0) {
-  //! console.log("Je suis vide");
   document.querySelector("#panierVide").style.display = 'flex';
 
 } else {
-  //! console.log("je suis rempli");
   document.querySelector("#panierVide").style.display = 'none';
   let productsInCart = [];
   for (k = 0; k < produitEnregistreLocalStorage.length; k++) {
@@ -83,7 +81,7 @@ for (let indexPanier = 0; indexPanier < bouton_supprimer.length; indexPanier++) 
 
     /* utilisation de la méthode filter inversée, cad inverse de on garde que l'élément séléctionné */
     produitEnregistreLocalStorage = produitEnregistreLocalStorage.filter(el => el.idproduit !== idàSupprimer);
-    console.log(produitEnregistreLocalStorage);
+    ////console.log(produitEnregistreLocalStorage);
 
     /* envoyer la variable dans le local Storage */
     localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
@@ -117,7 +115,7 @@ boutonSupprimer.addEventListener("click", (event) => {
 
 
 let totalQuantité = []; /* declarer un array vide */
-console.log("totalQuantité : " + totalQuantité);
+////console.log("totalQuantité : " + totalQuantité);
 
 /* retrouver la valeur dans le local storage */
 for (let indexSommeQuantité = 0; indexSommeQuantité < produitEnregistreLocalStorage.length; indexSommeQuantité++) {
@@ -131,14 +129,14 @@ for (let indexSommeQuantité = 0; indexSommeQuantité < produitEnregistreLocalSt
 const reduireQuantité = (AccQuantité, ValeurCourrQuantité) => AccQuantité + ValeurCourrQuantité;
 const QuantitéSommePannier = totalQuantité.reduce(reduireQuantité, 0);
 
-console.log("reduireQuantité : " + reduireQuantité);
-console.log("QuantitéSommePannier : " + QuantitéSommePannier);
+//// console.log("reduireQuantité : " + reduireQuantité);
+////console.log("QuantitéSommePannier : " + QuantitéSommePannier);
 
 /* afficher la somme des quantités dans cart.html */
 const quantitéHtml = document.querySelector("#totalQuantity")
 quantitéHtml.textContent = QuantitéSommePannier;
 
-console.log("quantitéHtml : " + quantitéHtml);
+////console.log("quantitéHtml : " + quantitéHtml);
 
 
 
@@ -159,9 +157,9 @@ for (let indexSommePannier = 0; indexSommePannier < produitEnregistreLocalStorag
 
 /* faire la somme des prix */
 const reduire = (accumulateur, valeurCourrante) => accumulateur + valeurCourrante;
-console.log("reduire : " + reduire);
+////console.log("reduire : " + reduire);
 const PrixSommePannier = totalPanier.reduce(reduire, 0);
-console.log("PrixSommePannier : " + PrixSommePannier);
+////console.log("PrixSommePannier : " + PrixSommePannier);
 
 // !console.log(PrixSommePannier);
 // !console.log(totalPanier);
@@ -186,18 +184,23 @@ console.log('editionQuantitePanierValue');
 console.log(editionQuantitePanier.value);
 
 
+produitEnregistreLocalStorage.forEach(canapModifQantite => {
 
-editionQuantitePanier.addEventListener("change", (event) => {
-  // console.log(editionQuantitePanier.value);
+  editionQuantitePanier.addEventListener("change", (event) => {
+    // console.log(editionQuantitePanier.value);
 
-  const nouvelleQuantité = editionQuantitePanier.value;
+    const nouvelleQuantité = editionQuantitePanier.value;
+    console.log("nouvelleQuantité : " + nouvelleQuantité);
+    console.log("produitEnregistreLocalStorage[0].quantiteProduit : " + produitEnregistreLocalStorage[canapModifQantite].quantiteProduit);
 
-  ////let quantiteUnCanapé = produitEnregistreLocalStorage[indexSommeQuantité].quantiteProduit; /* declarer variable de quantité */
+    ////let quantiteUnCanapé = produitEnregistreLocalStorage[indexSommeQuantité].quantiteProduit; /* declarer variable de quantité */
 
-  produitEnregistreLocalStorage[0].quantiteProduit = nouvelleQuantité;
-  console.log("quantite panier inner html");
-  console.log(editionQuantitePanier.closest("cart__item__content").innerHTML);
+    produitEnregistreLocalStorage[canapModifQantite].quantiteProduit = nouvelleQuantité;
+    console.log("quantite panier inner html");
+    console.log(editionQuantitePanier.closest("cart__item__content").innerHTML);
+  });
 });
+
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER FIN****************************** */
 
@@ -387,12 +390,9 @@ commandeCart.addEventListener("click", (event) => {
     faireObjetcontact();
     /* Passer a la confirmation */
     window.location.href = "confirmation.html";
-    console.log("hello mouchi");
-    console.table(produitEnregistreLocalStorage);
+    ////console.log("hello mouchi");
+    ////console.table(produitEnregistreLocalStorage);
   }
-
-
-
 
 
 });
@@ -405,11 +405,11 @@ commandeCart.addEventListener("click", (event) => {
 const sauvegardeLocalStorage = localStorage.getItem("contact");
 const objetSauvegardeLocalStorage = JSON.parse(sauvegardeLocalStorage);
 
-console.log("sauvegardeLocalStorage");
-console.log(sauvegardeLocalStorage);
+////console.log("sauvegardeLocalStorage");
+////console.log(sauvegardeLocalStorage);
 
-console.log("objetSauvegardeLocalStorage");
-console.log(objetSauvegardeLocalStorage);
+////console.log("objetSauvegardeLocalStorage");
+////console.log(objetSauvegardeLocalStorage);
 
 
 /* remplir les champs avec les infos du localstorage si elles existent */

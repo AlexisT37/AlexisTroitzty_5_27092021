@@ -10,7 +10,6 @@ const order = {
 };
 
 
-/* options pour le fetch */
 const options = {
     method: "POST",
     body: JSON.stringify(order),
@@ -22,7 +21,7 @@ const options = {
 fetch("http://localhost:3000/api/products/order", options)
     .then((res) => res.json())
     .then((data) => {
-        localStorage.clear();
+        // localStorage.clear();
         console.log(data);
         localStorage.setItem("orderId", "test");
         localStorage.setItem("total", "7777 ");
