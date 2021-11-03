@@ -22,6 +22,7 @@ fetch("http://localhost:3000/api/products/order", options)
     .then((res) => res.json())
     .then((data) => {
         // localStorage.clear();
+        /* eviter l'effacement du panier */
         console.log(data);
         localStorage.setItem("orderId", "test");
         localStorage.setItem("total", "7777 ");

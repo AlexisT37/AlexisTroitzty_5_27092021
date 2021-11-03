@@ -187,8 +187,8 @@ console.log(editionQuantitePanier.value);
 produitEnregistreLocalStorage.forEach(canapModifQantite => {
 
   editionQuantitePanier.addEventListener("change", (event) => {
-    // console.log(editionQuantitePanier.value);
-
+    console.log(editionQuantitePanier.value);
+    /* test pour quantité */
     const nouvelleQuantité = editionQuantitePanier.value;
     console.log("nouvelleQuantité : " + nouvelleQuantité);
     console.log("produitEnregistreLocalStorage[0].quantiteProduit : " + produitEnregistreLocalStorage[canapModifQantite].quantiteProduit);
