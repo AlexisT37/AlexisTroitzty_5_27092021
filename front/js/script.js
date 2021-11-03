@@ -24,24 +24,15 @@ function afficherProduit(div, product) {
 	  <img src="${product.imageUrl}" alt="${product.altTxt}">
 	  <h3 class="productName">${product.name}</h3>
 	  <p class="productDescription">${product.description}</p>
-	  <h3> ${(product.price / 100).toString().replace('.', ',')} €</h3>
+	  <h3> ${(product.price).toString()} €</h3>
 	</article>
   </a>`
-
-	// document.querySelector(".productName").innerHTML = `${articles[product].name}`;
-	// document.querySelector(".productDescription").innerHTML = `${articles[product].description}`;
-	// document.querySelector(".items > a > article > img").setAttribute("alt", `${articles[product].altTxt}`);
-	// document.querySelector(".items > a > article > img").setAttribute('src', `${articles[product].imageUrl}`);
-	// const prix = document.createElement("h3");
-	// document.querySelector("article").appendChild(prix);
-	// let prixFr = (articles[product].price / 100).toString().replace('.', ',');
-	// prix.innerHTML = `${prixFr} €`;
 }
 
 
 // Fonction pour obtenir les informations des produits depuis l'API
 function getProducts() {
-	fetch("http://localhost:3000/api/products") /* on fetch l'api avec son adress et la méethode fetch */
+	fetch("http://localhost:3000/api/products") /* on fetch l'api avec son adress et la méthode fetch */
 		.then(function (res) {
 			/* on utilise le then qui fait que si on a une fonction avec un res alors on va */
 			return res.json(); /* retourner le json du res */
@@ -55,12 +46,12 @@ function getProducts() {
 		.then(resultatAPI => {
 			/* si on a le resultat correct par l'API alors */
 			const articles = resultatAPI; /* on initialise une constante dont la valeur est le résultat de l'API*/
-			//   console.log(articles);
+			////   console.log(articles);
 
 			articles.forEach(product => {
 				afficherProduit(document.getElementById('items'), product) /* on affiche le product */
 				/* en séléctionnant à l'aide de l'ID de l'élément */
-				// console.log(product._id);
+				//// console.log(product._id);
 
 			})
 
