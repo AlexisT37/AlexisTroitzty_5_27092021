@@ -103,7 +103,6 @@ ajoutPanier.addEventListener("click", (event) => {
 
                     } else {
                         console.log("ce n'est pas la même couleur");
-                        // return canapTestId
                     }
                 }
             }
@@ -139,7 +138,7 @@ ajoutPanier.addEventListener("click", (event) => {
                 /* si il y a produitEnregistreLocalStorage */
                 addProduitLocalStorage();
                 verifierCouleur(produitEnregistreLocalStorage, id)
-                // confirmPopup();
+                confirmPopup();
 
                 //* cas ou pas de produit
             } else {
@@ -147,7 +146,7 @@ ajoutPanier.addEventListener("click", (event) => {
                 addProduitLocalStorage();
 
                 verifierCouleur(produitEnregistreLocalStorage, id)
-                // confirmPopup();
+                confirmPopup();
             }
 
         } else {
