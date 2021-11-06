@@ -1,33 +1,3 @@
-const order = {
-    contact: {
-        firstName: "testAlex",
-        lastName: "testFamille",
-        city: "testVille",
-        address: "testRue",
-        email: "hero@hotmail.com",
-    },
-    product: ["107fb5b75607497b96722bda5b504926"]
-};
-
-
-const options = {
-    method: "POST",
-    body: JSON.stringify(order),
-    headers: {
-        "Content-Type": "application/json"
-    },
-};
-
-fetch("http://localhost:3000/api/products/order", options)
-    .then((res) => res.json())
-    .then((data) => {
-        // localStorage.clear();
-        console.log(data);
-        localStorage.setItem("orderId", "test");
-        localStorage.setItem("total", "7777 ");
-
-    })
-
-    .catch((err) => {
-        alert("Erreur : " + err);
-    });
+idLocal = localStorage.getItem("orderId"); /* obtenir l'order id */
+document.querySelector("#orderId").textContent = idLocal; /* afficher l'order id */
+localStorage.removeItem("orderId"); /*  on retire l'order id pour qu'elle ne soit pas stockée */

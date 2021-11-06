@@ -6,6 +6,8 @@ messageList = ["#firstName", "#lastName", "#address", "#city", "#email"]
 messageList.map(msg => document.querySelector(`${msg}ErrorMsg`).style.display = 'none');
 messageList.map(msg => document.querySelector(`${msg}CheckMsg`).style.display = 'none');
 
+
+
 /* ******************************AFFICHAGE PANIER DEBUT****************************** */
 
 const contenuPanier = document.querySelector("#cart__items")
@@ -89,7 +91,7 @@ boutonSupprimer.addEventListener("click", (event) => {
   event.preventDefault();
 
   /* vider le local storage */
-  localStorage.clear(); /* methode clear pour vider le panier */
+  localStorage.removeItem('produit');
   window.location.href = "cart.html"; /* recharger la page */
 
 });
@@ -222,26 +224,75 @@ email.addEventListener("input", (event) => {
 const commandeCart = document.querySelector("#order");
 
 commandeCart.addEventListener("click", (event) => {
-  // event.preventDefault();
+  event.preventDefault();
+  /* mettre l'objet contact dans le localStorage */
+  const contact = {
+    firstName: document.querySelector("#firstName").value,
+    lastName: document.querySelector("#lastName").value,
+    address: document.querySelector("#address").value,
+    city: document.querySelector("#city").value,
+    email: document.querySelector("#email").value
+  }
+
+  localStorage.setItem("contact", JSON.stringify(contact));
 
   function PosterInfos() {
-    const contact = {
-      firstName: document.querySelector("#firstName").value,
-      lastName: document.querySelector("#lastName").value,
-      address: document.querySelector("#address").value,
-      city: document.querySelector("#city").value,
-      email: document.querySelector("#email").value
+    let listeIdsConfirmations = [];
+    for (let indexCanap = 0; indexCanap < produitEnregistreLocalStorage.length; indexCanap++) {
+      listeIdsConfirmations.push(produitEnregistreLocalStorage[indexCanap].idproduit)
     }
 
-    /* mettre l'objet contact dans le localStorage */
-    localStorage.setItem("contact", JSON.stringify(contact));
+    localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations));
+
+    const order = {
+      contact: {
+        firstName: document.querySelector("#firstName").value,
+        lastName: document.querySelector("#lastName").value,
+        address: document.querySelector("#address").value,
+        city: document.querySelector("#city").value,
+        email: document.querySelector("#email").value
+      },
+
+      products: listeIdsConfirmations,
+    }
+
+
+    console.log("order : ");
+    console.log(order);
+    // console.log("infosPost : ");
+    // console.log(infosPost);
+
+    const options = {
+      method: "POST",
+      // body: JSON.stringify(contact, listeIdsConfirmations),
+      body: JSON.stringify(order),
+      headers: {
+        "Content-Type": "application/json"
+      },
+    };
+
+    // console.log("options : ");
+    // console.log(options);
+
+
+    fetch("http://localhost:3000/api/products/order", options)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log("data : ");
+        // console.log(data);
+        localStorage.setItem("orderId", data.orderId);
+        /* verification de l'existence de l'id */
+        if (localStorage.orderId !== null && localStorage.orderId !== undefined) {
+          document.location.href = "confirmation.html"; /* aller a la page confirmation */
+        }
+      })
+      .catch((erreur) => {
+        alert(erreur);
+      });
 
   }
 
-
   PosterInfos();
-  /* Passer a la confirmation */
-  // window.location.href = "confirmation.html";
 });
 /* ******************************COMMANDE FIN****************************** */
 

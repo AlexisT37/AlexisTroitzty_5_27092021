@@ -23,8 +23,12 @@ function getUnProduit() {
             canap_price.textContent = `${(articles.price).toString()}` //Modif prix
             let canap_description = document.querySelector("#description")
             canap_description.textContent = `${articles.description}` //modif description
-
-
+            let canap_img = document.querySelector(".item__img img");
+            // let canap_img_src = canap_img.getAttribute("src");
+            // console.log("canap_img_src : " + canap_img_src);
+            // canap_img_src = `${articles.imageUrl}`;
+            canap_img.setAttribute("src", `${articles.imageUrl}`);
+            canap_img.setAttribute("alt", `${articles.altTxt}`);
 
             let couleur = document.getElementById("colors");
             let couleurs = articles.colors;
@@ -112,6 +116,10 @@ ajoutPanier.addEventListener("click", (event) => {
             /*-------------------- SECTION LOCAL STORAGE------------- */
 
             prixProduit = document.querySelector("#price").textContent; /* séléctionner id pour prix */
+            let canap_img = document.querySelector(".item__img img");
+            let canap_img_src = canap_img.getAttribute("src");
+            let canap_img_alt = canap_img.getAttribute("alt");
+
 
             let proprietesProduit = {
                 /* creer objet js avec 4 propriétés */
@@ -119,7 +127,9 @@ ajoutPanier.addEventListener("click", (event) => {
                 prixProduit: (parseInt((document.querySelector("#price").textContent))),
                 quantiteProduit: quantiteProduitInt,
                 idproduit: id,
-                titreCanapé: titreProductContent
+                titreCanapé: titreProductContent,
+                photoCanapé: canap_img_src,
+                altCanapé: canap_img_alt
 
             };
 
