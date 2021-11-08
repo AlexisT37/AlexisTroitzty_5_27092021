@@ -140,6 +140,44 @@ prixHtml.textContent = `${((PrixSommePannier)).toString()}`;
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER DEBUT****************************** */
 
+function modifierquantitéPanier() {
+  let qantitéAModifierChamp = document.querySelectorAll(".itemQuantity");
+
+  for (let canapéCompteurChamp = 0; canapéCompteurChamp < qantitéAModifierChamp.length; canapéCompteurChamp++) {
+    qantitéAModifierChamp[canapéCompteurChamp].addEventListener("change", (event) => {
+      event.preventDefault();
+
+      let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit;
+      let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value);
+
+
+      /* fonction pour trouver un element dans le localstorage */
+      function trouverLocal(canape) {
+        return produitEnregistreLocalStorage.find(canape);
+      }
+      const resultFind = trouverLocal(
+        /* fonction pour determiner si la valeur du localstorage est égale à la valeur du champ */
+        function verifierEgalite(canapéLocal) {
+          if (canapéLocal.valeurQuantitéModif !== quantityModif) {
+            return canapéLocal;
+          }
+        });
+
+
+      resultFind.quantiteProduit = valeurQuantitéModif;
+      produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = resultFind.quantiteProduit;
+
+      localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
+
+      // refresh rapide
+      location.reload();
+    })
+  }
+}
+modifierquantitéPanier();
+
+
+
 
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER FIN****************************** */
