@@ -6,22 +6,20 @@ messageList = ["#firstName", "#lastName", "#address", "#city", "#email"]
 messageList.map(msg => document.querySelector(`${msg}ErrorMsg`).style.display = 'none');
 messageList.map(msg => document.querySelector(`${msg}CheckMsg`).style.display = 'none');
 
-
-
 /* ******************************AFFICHAGE PANIER DEBUT****************************** */
+function afficherPanier() {
+  const contenuPanier = document.querySelector("#cart__items")
 
-const contenuPanier = document.querySelector("#cart__items")
+  /* cas ou le panier est vide */
+  if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0) {
+    document.querySelector("#panierVide").style.display = 'flex';
 
-/* cas ou le panier est vide */
-if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0) {
-  document.querySelector("#panierVide").style.display = 'flex';
+  } else {
+    document.querySelector("#panierVide").style.display = 'none';
+    let productsInCart = [];
+    for (k = 0; k < produitEnregistreLocalStorage.length; k++) {
 
-} else {
-  document.querySelector("#panierVide").style.display = 'none';
-  let productsInCart = [];
-  for (k = 0; k < produitEnregistreLocalStorage.length; k++) {
-
-    productsInCart = productsInCart + `
+      productsInCart = productsInCart + `
         <article class="cart__item" data-id="107fb5b75607497b96722bda5b504926">
                 <div class="cart__item__img">
                   <img src=${produitEnregistreLocalStorage[k].photoCanapé} alt="${produitEnregistreLocalStorage[k].altTextCanapé}">
@@ -45,13 +43,15 @@ if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0
               </article>
         `;
 
-  }
+    }
 
-  if (k == produitEnregistreLocalStorage.length) {
-    contenuPanier.innerHTML = productsInCart;
+    if (k == produitEnregistreLocalStorage.length) {
+      contenuPanier.innerHTML = productsInCart;
+    }
   }
 }
 
+afficherPanier()
 /* ******************************AFFICHAGE PANIER FIN****************************** */
 
 /* ******************************BOUTON SUPPRIMER DEBUT****************************** */
@@ -60,41 +60,49 @@ if (produitEnregistreLocalStorage === null || produitEnregistreLocalStorage == 0
 /* selectionner boutons supprimer */
 let bouton_supprimer = document.querySelectorAll(".deleteItem");
 
-/* boucle qui parcourt le panner */
+/* boucle qui parcourt le pannier */
 for (let indexPanier = 0; indexPanier < bouton_supprimer.length; indexPanier++) {
 
   bouton_supprimer[indexPanier].addEventListener("click", (event) => {
     event.preventDefault();
 
     /* selectionner l'id du produit a supprimer avec le clic bouton */
+    let couleurASupprimer = produitEnregistreLocalStorage[indexPanier].couleurProduit;
     let idàSupprimer = produitEnregistreLocalStorage[indexPanier].idproduit;
 
-    /* utilisation de la méthode filter inversée, cad inverse de on garde que l'élément séléctionné */
-    produitEnregistreLocalStorage = produitEnregistreLocalStorage.filter(el => el.idproduit !== idàSupprimer);
+    /* utilisation de la méthode filter inversée*/
+    /* on ne garde que les éléments qui ne remplissent pas les conditions */
+    produitEnregistreLocalStorage = produitEnregistreLocalStorage.filter(el => el.idproduit !== idàSupprimer || el.couleurProduit !== couleurASupprimer);
 
     /* envoyer la variable dans le local Storage */
     localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
 
-    /* alerte pour recharger la page */
-    alert("Ce produit a été supprimé")
+
+    /* si le produitLocalStorage est vide alors autant le supprimer */
+    if (localStorage.getItem('produit') == "[]" || produitEnregistreLocalStorage == "[]" || produitEnregistreLocalStorage.length == 0) {
+      localStorage.removeItem('produit');
+    }
     window.location.href = "cart.html";
   });
 }
 
 /* ******************************BOUTON SUPPRIMER FIN****************************** */
 
-
 /* ******************************BOUTON VIDER LE PANIER DEBUT****************************** */
-/* selection du bouton */
-const boutonSupprimer = document.querySelector("#viderLePanier");
-boutonSupprimer.addEventListener("click", (event) => {
-  event.preventDefault();
+function viderPanier() {
+  /* selection du bouton */
+  const boutonSupprimer = document.querySelector("#viderLePanier");
+  boutonSupprimer.addEventListener("click", (event) => {
+    event.preventDefault();
 
-  /* vider le local storage */
-  localStorage.removeItem('produit');
-  window.location.href = "cart.html"; /* recharger la page */
+    /* vider le local storage */
+    localStorage.removeItem('produit');
+    window.location.href = "cart.html"; /* recharger la page */
 
-});
+  });
+}
+
+viderPanier();
 
 /* ******************************BOUTON VIDER LE PANIER FIN****************************** */
 
@@ -118,6 +126,9 @@ const quantitéHtml = document.querySelector("#totalQuantity")
 quantitéHtml.textContent = QuantitéSommePannier;
 /* ******************************CALCULER LA SOMME TOTALE DES QUANTITES FIN****************************** */
 
+
+
+
 /* ******************************CALCULER LA SOMME TOTALE DES PRIX DEBUT****************************** */
 /* variable pour total */
 let totalPanier = []; /* declarer un array vide */
@@ -138,6 +149,8 @@ prixHtml.textContent = `${((PrixSommePannier)).toString()}`;
 
 /* ******************************CALCULER LA SOMME TOTALE DES PRIX FIN****************************** */
 
+
+
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER DEBUT****************************** */
 
 function modifierquantitéPanier() {
@@ -149,7 +162,6 @@ function modifierquantitéPanier() {
 
       let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit;
       let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value);
-
 
       /* fonction pour trouver un element dans le localstorage */
       function trouverLocal(canape) {
@@ -175,10 +187,6 @@ function modifierquantitéPanier() {
   }
 }
 modifierquantitéPanier();
-
-
-
-
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER FIN****************************** */
 
@@ -243,8 +251,6 @@ city.addEventListener("input", (event) => {
 email.addEventListener("input", (event) => {
   let emailValue = email.value;
 
-  //// console.log(emailValue);
-  //// console.log(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue));
   if (!emailValue || !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue))) {
     document.querySelector("#emailErrorMsg").style.display = 'flex';
     document.querySelector("#emailCheckMsg").style.display = 'none';
@@ -256,7 +262,6 @@ email.addEventListener("input", (event) => {
 });
 
 /* ****************************************VALIDER LE FORMULAIRE FIN******************************************************* */
-
 
 /* envoyer les informations */
 const commandeCart = document.querySelector("#order");
@@ -276,11 +281,12 @@ commandeCart.addEventListener("click", (event) => {
 
   function PosterInfos() {
     let listeIdsConfirmations = [];
+    /* pousser les ids à la fin de l'array*/
     for (let indexCanap = 0; indexCanap < produitEnregistreLocalStorage.length; indexCanap++) {
       listeIdsConfirmations.push(produitEnregistreLocalStorage[indexCanap].idproduit)
     }
 
-    localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations));
+    localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations)); /* insérer les ids dan le localstorage */
 
     const order = {
       contact: {
@@ -292,26 +298,16 @@ commandeCart.addEventListener("click", (event) => {
       },
 
       products: listeIdsConfirmations,
+      /* objet products qui contient les ids des canapés */
     }
-
-
-    console.log("order : ");
-    console.log(order);
-    // console.log("infosPost : ");
-    // console.log(infosPost);
 
     const options = {
       method: "POST",
-      // body: JSON.stringify(contact, listeIdsConfirmations),
       body: JSON.stringify(order),
       headers: {
         "Content-Type": "application/json"
       },
     };
-
-    // console.log("options : ");
-    // console.log(options);
-
 
     fetch("http://localhost:3000/api/products/order", options)
       .then((response) => response.json())
@@ -346,12 +342,11 @@ function fillInputLocalStorage(input) {
   /* Ceci est une fonction pour trouver automatiquement la valeur de l'input dans le local storage puis le reassigner dans le champ */
 }
 
-let listeChamps = ["firstName", "lastName", "address", "city", "email"]
-
-
+let listeChamps = ["firstName", "lastName", "address", "city", "email"] /* on crée un une liste de champs */
 
 /* ici on utilise une boucle forEach pour ne pas avoir a répéter l'appel de la fonction 5 fois */
 listeChamps.forEach(champ => {
+  /* appliquer la fonction à la liste */
   fillInputLocalStorage(champ)
 });
 
