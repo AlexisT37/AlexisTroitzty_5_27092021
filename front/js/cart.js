@@ -1,8 +1,8 @@
-let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit")); /* creer objet js */
+let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit")); /* creer objet js à partir du localStorage*/
 
 /* creer une liste d'ids avec chaque champ puis mapper sur cette liste avec nos 2 fonctions pour cacher les messages */
 /* au chargement de la page. */
-messageList = ["#firstName", "#lastName", "#address", "#city", "#email"]
+let messageList = ["#firstName", "#lastName", "#address", "#city", "#email"]
 messageList.map(msg => document.querySelector(`${msg}ErrorMsg`).style.display = 'none');
 messageList.map(msg => document.querySelector(`${msg}CheckMsg`).style.display = 'none');
 
@@ -15,8 +15,10 @@ function afficherPanier() {
     document.querySelector("#panierVide").style.display = 'flex';
 
   } else {
+    /* cas où le panier est plein */
     document.querySelector("#panierVide").style.display = 'none';
-    let productsInCart = [];
+    let productsInCart = []; /* on boucle dans la liste  produitEnregistreLocalStorage puis on injecte le code HTML*/
+    /* grâce aux données du localstorage */
     for (k = 0; k < produitEnregistreLocalStorage.length; k++) {
 
       productsInCart = productsInCart + `
@@ -46,21 +48,21 @@ function afficherPanier() {
     }
 
     if (k == produitEnregistreLocalStorage.length) {
-      contenuPanier.innerHTML = productsInCart;
+      contenuPanier.innerHTML = productsInCart; /* on injecte quand on arrive à la fin du localstorage */
     }
   }
 }
 
-afficherPanier()
+afficherPanier(); /* appel de la fonction */
 /* ******************************AFFICHAGE PANIER FIN****************************** */
 
-/* ******************************BOUTON SUPPRIMER DEBUT****************************** */
-// selection bouton supprimer avec la classe deleteItem
 
-/* selectionner boutons supprimer */
+
+/* ******************************BOUTON SUPPRIMER DEBUT****************************** */
+// On séléctionne le bouton supprimer
 let bouton_supprimer = document.querySelectorAll(".deleteItem");
 
-/* boucle qui parcourt le pannier */
+/* boucle qui parcourt le panier */
 for (let indexPanier = 0; indexPanier < bouton_supprimer.length; indexPanier++) {
 
   bouton_supprimer[indexPanier].addEventListener("click", (event) => {
@@ -90,6 +92,7 @@ for (let indexPanier = 0; indexPanier < bouton_supprimer.length; indexPanier++) 
 
 /* ******************************BOUTON VIDER LE PANIER DEBUT****************************** */
 function viderPanier() {
+  /* fonction pour vider le panier en retirant la partie produit du localstorage */
   /* selection du bouton */
   const boutonSupprimer = document.querySelector("#viderLePanier");
   boutonSupprimer.addEventListener("click", (event) => {
@@ -152,22 +155,24 @@ prixHtml.textContent = `${((PrixSommePannier)).toString()}`;
 
 
 /* ******************************MODIFIER LA QUANTITE DANS LE PANIER DEBUT****************************** */
-
+/* fonction pour modifier la quantité de canapés dans le panier */
 function modifierquantitéPanier() {
   let qantitéAModifierChamp = document.querySelectorAll(".itemQuantity");
 
   for (let canapéCompteurChamp = 0; canapéCompteurChamp < qantitéAModifierChamp.length; canapéCompteurChamp++) {
+    /* on parcourt la liste des canapés présents dans le panier */
     qantitéAModifierChamp[canapéCompteurChamp].addEventListener("change", (event) => {
+      /* on écoute un éventuel changement de valeur dans le champ quantité */
       event.preventDefault();
 
-      let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit;
-      let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value);
+      let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit; /* valeur de quantité dans le localStorage */
+      let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value); /* valeur affichée dans le champ */
 
       /* fonction pour trouver un element dans le localstorage */
       function trouverLocal(canape) {
         return produitEnregistreLocalStorage.find(canape);
       }
-      const resultFind = trouverLocal(
+      const résultat = trouverLocal(
         /* fonction pour determiner si la valeur du localstorage est égale à la valeur du champ */
         function verifierEgalite(canapéLocal) {
           if (canapéLocal.valeurQuantitéModif !== quantityModif) {
@@ -176,12 +181,12 @@ function modifierquantitéPanier() {
         });
 
 
-      resultFind.quantiteProduit = valeurQuantitéModif;
-      produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = resultFind.quantiteProduit;
+      résultat.quantiteProduit = valeurQuantitéModif; /* on assigne la valeur modifiée au résultat */
+      produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = résultat.quantiteProduit; /* on assigne le résultat au localstorage */
+      localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /* on enregistre les changements dans le localstorage */
 
-      localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
-
-      // refresh rapide
+      /* on rafraichit la page après modification */
+      /* afin que le prix total soit actualisé */
       location.reload();
     })
   }
@@ -200,33 +205,42 @@ const address = document.querySelector("#address");
 const city = document.querySelector("#city");
 const email = document.querySelector("#email");
 
+function verifierChamp(typeChamp, value) {
+  /* fonction pour vérifier la validité des champs les moins complexes */
+
+  if (!value || !(/^[-a-zA-Zàâäéèêëïîôöùûüç]{2,20}$/.test(value))) {
+    /* si les regex ne sont pas satisfaites */
+    /* c'est-à-dire qu'on a une chaine de caractère autre que des lettres minuscules ou majuscule, de longeur de plus de 20 ou moins de 2 */
+    document.querySelector(`#${typeChamp}ErrorMsg`).style.display = 'flex'; /* afficher le message d'erreur */
+    document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'none'; /* cacher le message de validation */
+
+  } else {
+    document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'flex';
+    document.querySelector(`#${typeChamp}ErrorMsg`).style.display = 'none';
+
+  }
+
+} /* fin de la fonction verifierChamp() */
+
 firstName.addEventListener("input", (event) => {
   let firstNameValue = firstName.value;
-  if (!firstNameValue || !(/^[A-Za-z]{2,20}$/.test(firstNameValue))) {
-    document.querySelector("#firstNameErrorMsg").style.display = 'flex';
-    document.querySelector("#firstNameCheckMsg").style.display = 'none';
-
-  } else {
-    document.querySelector("#firstNameCheckMsg").style.display = 'flex';
-    document.querySelector("#firstNameErrorMsg").style.display = 'none';
-
-  }
+  verifierChamp("firstName", firstNameValue)
 });
+
 lastName.addEventListener("input", (event) => {
   let lastNameValue = lastName.value;
-  if (!lastNameValue || !(/^[A-Za-z]{2,20}$/.test(lastNameValue))) {
-    document.querySelector("#lastNameErrorMsg").style.display = 'flex';
-    document.querySelector("#lastNameCheckMsg").style.display = 'none';
-
-  } else {
-    document.querySelector("#lastNameCheckMsg").style.display = 'flex';
-    document.querySelector("#lastNameErrorMsg").style.display = 'none';
-
-  }
+  verifierChamp("lastName", lastNameValue)
 });
+
+city.addEventListener("input", (event) => {
+  let cityValue = city.value;
+  verifierChamp("city", cityValue)
+});
+
 address.addEventListener("input", (event) => {
   let adressValue = address.value;
-  if (!adressValue || !(/^[A-Za-z]{2,20}$/.test(adressValue))) {
+  /* regex qui vérifie qu'on a un numéro de rue de 3 chiffres maximum, avec un espace, une virgule ou un espace après */
+  if (!adressValue || !(/^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+/.test(adressValue))) {
     document.querySelector("#addressErrorMsg").style.display = 'flex';
     document.querySelector("#addressCheckMsg").style.display = 'none';
 
@@ -236,22 +250,12 @@ address.addEventListener("input", (event) => {
 
   }
 });
-city.addEventListener("input", (event) => {
-  let cityValue = city.value;
-  if (!cityValue || !(/^[A-Za-z]{2,20}$/.test(cityValue))) {
-    document.querySelector("#cityErrorMsg").style.display = 'flex';
-    document.querySelector("#cityCheckMsg").style.display = 'none';
 
-  } else {
-    document.querySelector("#cityCheckMsg").style.display = 'flex';
-    document.querySelector("#cityErrorMsg").style.display = 'none';
-
-  }
-});
 email.addEventListener("input", (event) => {
   let emailValue = email.value;
 
   if (!emailValue || !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue))) {
+    /* regex pour verifier que le champ aura la forme d'une adresse email */
     document.querySelector("#emailErrorMsg").style.display = 'flex';
     document.querySelector("#emailCheckMsg").style.display = 'none';
 
@@ -280,6 +284,7 @@ commandeCart.addEventListener("click", (event) => {
   localStorage.setItem("contact", JSON.stringify(contact));
 
   function PosterInfos() {
+    /* fonction pour envoyer les informations au serveur */
     let listeIdsConfirmations = [];
     /* pousser les ids à la fin de l'array*/
     for (let indexCanap = 0; indexCanap < produitEnregistreLocalStorage.length; indexCanap++) {
@@ -289,13 +294,7 @@ commandeCart.addEventListener("click", (event) => {
     localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations)); /* insérer les ids dan le localstorage */
 
     const order = {
-      contact: {
-        firstName: document.querySelector("#firstName").value,
-        lastName: document.querySelector("#lastName").value,
-        address: document.querySelector("#address").value,
-        city: document.querySelector("#city").value,
-        email: document.querySelector("#email").value
-      },
+      contact: contact,
 
       products: listeIdsConfirmations,
       /* objet products qui contient les ids des canapés */
@@ -324,7 +323,7 @@ commandeCart.addEventListener("click", (event) => {
         alert(erreur);
       });
 
-  }
+  } /* fin de la fonction PosterInfos() */
 
   PosterInfos();
 });
@@ -339,7 +338,7 @@ const objetSauvegardeLocalStorage = JSON.parse(sauvegardeLocalStorage);
 /* remplir les champs avec les infos du localstorage si elles existent */
 function fillInputLocalStorage(input) {
   document.querySelector(`#${input}`).value = objetSauvegardeLocalStorage[input];
-  /* Ceci est une fonction pour trouver automatiquement la valeur de l'input dans le local storage puis le reassigner dans le champ */
+  /* fonction pour trouver automatiquement la valeur de l'input dans le local storage puis le reassigner dans le champ */
 }
 
 let listeChamps = ["firstName", "lastName", "address", "city", "email"] /* on crée un une liste de champs */
@@ -348,6 +347,6 @@ let listeChamps = ["firstName", "lastName", "address", "city", "email"] /* on cr
 listeChamps.forEach(champ => {
   /* appliquer la fonction à la liste */
   fillInputLocalStorage(champ)
-});
+}); /* fin du forEach */
 
 /* ******************************LOCAL STORAGE ET FORMULAIRE FIN****************************** */

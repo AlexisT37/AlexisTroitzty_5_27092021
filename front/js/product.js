@@ -126,8 +126,6 @@ function ajouterAuPanier() {
                                 console.log("***************************************")
                                 produitEnregistreLocalStorage[canapCompteur].quantiteProduit += quantiteProduitInt;
                                 localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
-
-                                // ajouterBoutLocalStorage();
                                 confirmPopup();
 
 
