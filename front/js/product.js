@@ -154,7 +154,12 @@ function ajouterAuPanier() {
                     };
                 }; /* fin de déclaration fonction mettreDansLeLocalStorage() */
                 mettreDansLeLocalStorage();
+            } else {
+                alert("Choisissiez un nombre entre 1 et 100");
+
             }; /* fin du if interne quantité */
+        } else {
+            alert("Vous devez entrer un nombre entier");
         }; /* fin du if externe quantité*/
     }); /* fin du add event listener */
 } /* fin de la fonction ajouterAuPanier */
