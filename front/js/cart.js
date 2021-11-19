@@ -165,35 +165,7 @@ function modifierquantitéPanier() {
       /* on écoute un éventuel changement de valeur dans le champ quantité */
       event.preventDefault();
 
-      // let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit; /* valeur de quantité dans le localStorage */
-
-      // console.log("valeur de quantité dans le localStorage : ");
-      // console.log(quantityModif);
-
       let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value); /* nouvelle valeur valeur affichée dans le champ */
-
-      // console.log("Nouvelle valeur : ");
-      // console.log(valeurQuantitéModif);
-
-      // let elementCart = qantitéAModifierChamp[canapéCompteurChamp].closest(".cart__item");
-      // console.log("élément du panier : ");
-      // console.log(elementCart);
-
-      // let elementCartId = elementCart.dataset.id;
-      // console.log("id de l'élément : ");
-      // console.log(elementCartId);
-
-      // let elementCartCouleur = elementCart.querySelector(".cart__item__content__titlePrice p").textContent;
-      // console.log("Couleur de l'élément : ");
-      // console.log(elementCartCouleur);
-
-      // /* fonction pour trouver un element dans le localstorage */
-      // let idCanapChanger = qantitéAModifierChamp[canapéCompteurChamp].dataset.id;
-      // console.log("id de notre canapé : ");
-      // console.log(idCanapChanger);
-
-
-      // résultat.quantiteProduit = valeurQuantitéModif; /* on assigne la valeur modifiée au résultat */
       produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = valeurQuantitéModif; /* on assigne le résultat au localstorage */
       localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /* on enregistre les changements dans le localstorage */
 
