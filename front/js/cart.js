@@ -4,7 +4,7 @@ let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit"));
 /* au chargement de la page. */
 let messageList = ["#firstName", "#lastName", "#address", "#city", "#email"]
 messageList.map(msg => document.querySelector(`${msg}ErrorMsg`).style.display = 'none');
-messageList.map(msg => document.querySelector(`${msg}CheckMsg`).style.display = 'none');
+// messageList.map(msg => document.querySelector(`${msg}CheckMsg`).style.display = 'none');
 
 /* ******************************AFFICHAGE PANIER DEBUT****************************** */
 function afficherPanier() {
@@ -22,9 +22,9 @@ function afficherPanier() {
     for (k = 0; k < produitEnregistreLocalStorage.length; k++) {
 
       productsInCart = productsInCart + `
-        <article class="cart__item" data-id="107fb5b75607497b96722bda5b504926">
+        <article class="cart__item" data-id=${produitEnregistreLocalStorage[k].idproduit}>
                 <div class="cart__item__img">
-                  <img src=${produitEnregistreLocalStorage[k].photoCanapé} alt="${produitEnregistreLocalStorage[k].altTextCanapé}">
+                  <img src=${produitEnregistreLocalStorage[k].photoCanapé} alt="${produitEnregistreLocalStorage[k].altCanapé}">
                 </div>
                 <div class="cart__item__content">
                   <div class="cart__item__content__titlePrice">
@@ -165,24 +165,36 @@ function modifierquantitéPanier() {
       /* on écoute un éventuel changement de valeur dans le champ quantité */
       event.preventDefault();
 
-      let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit; /* valeur de quantité dans le localStorage */
-      let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value); /* valeur affichée dans le champ */
+      // let quantityModif = produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit; /* valeur de quantité dans le localStorage */
 
-      /* fonction pour trouver un element dans le localstorage */
-      function trouverLocal(canape) {
-        return produitEnregistreLocalStorage.find(canape);
-      }
-      const résultat = trouverLocal(
-        /* fonction pour determiner si la valeur du localstorage est égale à la valeur du champ */
-        function verifierEgalite(canapéLocal) {
-          if (canapéLocal.valeurQuantitéModif !== quantityModif) {
-            return canapéLocal;
-          }
-        });
+      // console.log("valeur de quantité dans le localStorage : ");
+      // console.log(quantityModif);
+
+      let valeurQuantitéModif = parseInt(qantitéAModifierChamp[canapéCompteurChamp].value); /* nouvelle valeur valeur affichée dans le champ */
+
+      // console.log("Nouvelle valeur : ");
+      // console.log(valeurQuantitéModif);
+
+      // let elementCart = qantitéAModifierChamp[canapéCompteurChamp].closest(".cart__item");
+      // console.log("élément du panier : ");
+      // console.log(elementCart);
+
+      // let elementCartId = elementCart.dataset.id;
+      // console.log("id de l'élément : ");
+      // console.log(elementCartId);
+
+      // let elementCartCouleur = elementCart.querySelector(".cart__item__content__titlePrice p").textContent;
+      // console.log("Couleur de l'élément : ");
+      // console.log(elementCartCouleur);
+
+      // /* fonction pour trouver un element dans le localstorage */
+      // let idCanapChanger = qantitéAModifierChamp[canapéCompteurChamp].dataset.id;
+      // console.log("id de notre canapé : ");
+      // console.log(idCanapChanger);
 
 
-      résultat.quantiteProduit = valeurQuantitéModif; /* on assigne la valeur modifiée au résultat */
-      produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = résultat.quantiteProduit; /* on assigne le résultat au localstorage */
+      // résultat.quantiteProduit = valeurQuantitéModif; /* on assigne la valeur modifiée au résultat */
+      produitEnregistreLocalStorage[canapéCompteurChamp].quantiteProduit = valeurQuantitéModif; /* on assigne le résultat au localstorage */
       localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /* on enregistre les changements dans le localstorage */
 
       /* on rafraichit la page après modification */
@@ -212,10 +224,10 @@ function verifierChamp(typeChamp, value) {
     /* si les regex ne sont pas satisfaites */
     /* c'est-à-dire qu'on a une chaine de caractère autre que des lettres minuscules ou majuscule, de longeur de plus de 20 ou moins de 2 */
     document.querySelector(`#${typeChamp}ErrorMsg`).style.display = 'flex'; /* afficher le message d'erreur */
-    document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'none'; /* cacher le message de validation */
+    // document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'none'; /* cacher le message de validation */
 
   } else {
-    document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'flex';
+    // document.querySelector(`#${typeChamp}CheckMsg`).style.display = 'flex';
     document.querySelector(`#${typeChamp}ErrorMsg`).style.display = 'none';
 
   }
@@ -242,10 +254,10 @@ address.addEventListener("input", (event) => {
   /* regex qui vérifie qu'on a un numéro de rue de 3 chiffres maximum, avec un espace, une virgule ou un espace après */
   if (!adressValue || !(/^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+/.test(adressValue))) {
     document.querySelector("#addressErrorMsg").style.display = 'flex';
-    document.querySelector("#addressCheckMsg").style.display = 'none';
+    // document.querySelector("#addressCheckMsg").style.display = 'none';
 
   } else {
-    document.querySelector("#addressCheckMsg").style.display = 'flex';
+    // document.querySelector("#addressCheckMsg").style.display = 'flex';
     document.querySelector("#addressErrorMsg").style.display = 'none';
 
   }
@@ -257,13 +269,15 @@ email.addEventListener("input", (event) => {
   if (!emailValue || !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailValue))) {
     /* regex pour verifier que le champ aura la forme d'une adresse email */
     document.querySelector("#emailErrorMsg").style.display = 'flex';
-    document.querySelector("#emailCheckMsg").style.display = 'none';
+    // document.querySelector("#emailCheckMsg").style.display = 'none';
 
   } else {
-    document.querySelector("#emailCheckMsg").style.display = 'flex';
+    // document.querySelector("#emailCheckMsg").style.display = 'flex';
     document.querySelector("#emailErrorMsg").style.display = 'none';
   }
 });
+
+
 
 /* ****************************************VALIDER LE FORMULAIRE FIN******************************************************* */
 
@@ -272,60 +286,72 @@ const commandeCart = document.querySelector("#order");
 
 commandeCart.addEventListener("click", (event) => {
   event.preventDefault();
-  /* mettre l'objet contact dans le localStorage */
-  const contact = {
-    firstName: document.querySelector("#firstName").value,
-    lastName: document.querySelector("#lastName").value,
-    address: document.querySelector("#address").value,
-    city: document.querySelector("#city").value,
-    email: document.querySelector("#email").value
-  }
 
-  localStorage.setItem("contact", JSON.stringify(contact));
+  if (!address.value || !(/^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+/.test(address.value)) ||
+    !lastName.value || !(/^[-a-zA-Zàâäéèêëïîôöùûüç]{2,20}$/.test(lastName.value)) ||
+    !firstName.value || !(/^[-a-zA-Zàâäéèêëïîôöùûüç]{2,20}$/.test(firstName.value)) ||
+    !city.value || !(/^[-a-zA-Zàâäéèêëïîôöùûüç]{2,20}$/.test(city.value)) ||
+    !email.value || !(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email.value))) {
+    alert("Vous devez Remplir les champs correctement");
+  } else {
 
-  function PosterInfos() {
-    /* fonction pour envoyer les informations au serveur */
-    let listeIdsConfirmations = [];
-    /* pousser les ids à la fin de l'array*/
-    for (let indexCanap = 0; indexCanap < produitEnregistreLocalStorage.length; indexCanap++) {
-      listeIdsConfirmations.push(produitEnregistreLocalStorage[indexCanap].idproduit)
+
+    /* mettre l'objet contact dans le localStorage */
+    const contact = {
+      firstName: document.querySelector("#firstName").value,
+      lastName: document.querySelector("#lastName").value,
+      address: document.querySelector("#address").value,
+      city: document.querySelector("#city").value,
+      email: document.querySelector("#email").value
     }
 
-    localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations)); /* insérer les ids dan le localstorage */
+    localStorage.setItem("contact", JSON.stringify(contact));
 
-    const order = {
-      contact: contact,
+    function PosterInfos() {
+      /* fonction pour envoyer les informations au serveur */
+      let listeIdsConfirmations = [];
+      /* pousser les ids à la fin de l'array*/
+      for (let indexCanap = 0; indexCanap < produitEnregistreLocalStorage.length; indexCanap++) {
+        listeIdsConfirmations.push(produitEnregistreLocalStorage[indexCanap].idproduit)
+      }
 
-      products: listeIdsConfirmations,
-      /* objet products qui contient les ids des canapés */
-    }
+      localStorage.setItem("listeIdsConfirmations", JSON.stringify(listeIdsConfirmations)); /* insérer les ids dan le localstorage */
 
-    const options = {
-      method: "POST",
-      body: JSON.stringify(order),
-      headers: {
-        "Content-Type": "application/json"
-      },
-    };
+      const order = {
+        contact: contact,
 
-    fetch("http://localhost:3000/api/products/order", options)
-      .then((response) => response.json())
-      .then((data) => {
-        // console.log("data : ");
-        // console.log(data);
-        localStorage.setItem("orderId", data.orderId);
-        /* verification de l'existence de l'id */
-        if (localStorage.orderId !== null && localStorage.orderId !== undefined) {
-          document.location.href = "confirmation.html"; /* aller a la page confirmation */
-        }
-      })
-      .catch((erreur) => {
-        alert(erreur);
-      });
+        products: listeIdsConfirmations,
+        /* objet products qui contient les ids des canapés */
+      }
 
-  } /* fin de la fonction PosterInfos() */
+      const options = {
+        method: "POST",
+        body: JSON.stringify(order),
+        headers: {
+          "Content-Type": "application/json"
+        },
+      };
 
-  PosterInfos();
+      fetch("http://localhost:3000/api/products/order", options)
+        .then((response) => response.json())
+        .then((data) => {
+          // console.log("data : ");
+          // console.log(data);
+          // localStorage.setItem("orderId", data.orderId);
+          /* verification de l'existence de l'id */
+          // if (localStorage.orderId !== null && localStorage.orderId !== undefined) {
+
+          document.location.href = `confirmation.html?id=${data.orderId}`; /* aller a la page confirmation */
+          /* programmer le futur searchparams pour la confirmation */
+        })
+        .catch((erreur) => {
+          alert(erreur);
+        });
+
+    } /* fin de la fonction PosterInfos() */
+
+    PosterInfos();
+  } /* fin branche else */
 });
 /* ******************************COMMANDE FIN****************************** */
 

@@ -49,38 +49,67 @@ function getUnProduit() {
         }); /* fin du then API */
 }; /* fin du get UnProduit */
 
+/* fonction pour confirmer le choix avec une fenêtre pop up */
+function confirmPopup() {
+    if (window.confirm("le produit est ajouté au panier, OK pour accéder au panier, Cancel pour retourner à l'acceuil")) {
+        window.location.href = "cart.html";
+    } else {
+        window.location.href = "index.html";
+    }
+} /* fin de la fonction confirmPopup */
+
+/* fonction pour initialiser le localStorage */
+function initialiserLocalStorage(propriétés) {
+    const produitEnregistreLocalStorage = []; /* comme il n'y a pas d'array on le crée */
+    produitEnregistreLocalStorage.push(propriétés); /* on push l'objet proprietesProduit a la fin de produitEnregistreLocalStorage*/
+    localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /* on verrouille litem produit dans le localstorage */
+};
+
+/* si localStorage n'est pas vide */
+function ajouterBoutLocalStorage(propriétés, produitEnregistreLocalStorage) {
+    produitEnregistreLocalStorage.push(propriétés); /* on push l'objet proprietesProduit a la fin de produitEnregistreLocalStorage*/
+    localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
+}
+
+function checkQuantitéProduit(quantiteProduitInt) {
+
+    // verification de validité du nombre d'article
+    if ((typeof quantiteProduitInt) === "number" && quantiteProduitInt % 1 === 0) {
+        /* le typeof est numeber et c'est un integer, pas un float */
+        if (quantiteProduitInt <= 100 && quantiteProduitInt >= 1) {
+            return true;
+        } else {
+            alert("Choisissiez un nombre entre 1 et 100");
+            return false;
+        }
+    } else {
+        alert("Choisissiez un nombre entre 1 et 100");
+        return false;
+    }
+}
+
 function ajouterAuPanier() {
     /* cibler le panier */
     const ajoutPanier = document.querySelector("#addToCart");
     ajoutPanier.addEventListener("click", (event) => {
-        event.preventDefault();
+            event.preventDefault();
 
-        /* fonction pour confirmer le choix avec une fenêtre pop up */
-        function confirmPopup() {
-            if (window.confirm("le produit est ajouté au panier, OK pour accéder au panier, Cancel pour retourner à l'acceuil")) {
-                window.location.href = "cart.html";
-            } else {
-                window.location.href = "index.html";
-            }
-        } /* fin de la fonction confirmPopup */
+            /* déclaration des variables afin de créer un objet pour le panier */
+            const formulaire = document.querySelector("#colors"); /* selection liste couleurs */
+            const couleurValue = formulaire.value; /* valeur de la couleur*/
+            const quantiteProduitString = (document.querySelector("#quantity")).value; /* valeur de la quantité choisie */
+            const quantiteProduitInt = parseFloat(quantiteProduitString); /* valeur entière de la quantité choisie */
+            const titreProduct = document.querySelector("#title")
+            const titreProductContent = titreProduct.innerHTML;
+            prixProduit = document.querySelector("#price").textContent; /* séléctionner id pour prix */
+            let canap_img = document.querySelector(".item__img img"); /* séléctionner image pour avoir src et alt */
+            let canap_img_src = canap_img.getAttribute("src"); /* séléctionner attribut src */
+            let canap_img_alt = canap_img.getAttribute("alt"); /* séléctionner attribut alt */
 
-        /* déclaration des variables afin de créer un objet pour le panier */
-        const formulaire = document.querySelector("#colors"); /* selection liste couleurs */
-        const couleurValue = formulaire.value; /* valeur de la couleur*/
-        const quantiteProduitString = (document.querySelector("#quantity")).value; /* valeur de la quantité choisie */
-        const quantiteProduitInt = parseInt(quantiteProduitString); /* valeur entière de la quantité choisie */
-        const titreProduct = document.querySelector("#title")
-        const titreProductContent = titreProduct.innerHTML;
-        prixProduit = document.querySelector("#price").textContent; /* séléctionner id pour prix */
-        let canap_img = document.querySelector(".item__img img"); /* séléctionner image pour avoir src et alt */
-        let canap_img_src = canap_img.getAttribute("src"); /* séléctionner attribut src */
-        let canap_img_alt = canap_img.getAttribute("alt"); /* séléctionner attribut alt */
+            if (checkQuantitéProduit(quantiteProduitInt) == true) {
 
-        // verification de validité du nombre d'article
-        if ((typeof quantiteProduitInt) === "number" && quantiteProduitInt % 1 === 0) {
-            /* le typeof est numeber et c'est un integer, pas un float */
-            if (quantiteProduitInt <= 100 && quantiteProduitInt >= 1) {
 
+                mettreDansLeLocalStorage();
 
                 function mettreDansLeLocalStorage() {
                     let proprietesProduit = {
@@ -97,69 +126,41 @@ function ajouterAuPanier() {
 
                     let produitEnregistreLocalStorage = JSON.parse(localStorage.getItem("produit")); /* aller chercher string produit et créer objet js */
 
-                    /* fonction pour initialiser le localStorage */
-                    function initialiserLocalStorage() {
-                        produitEnregistreLocalStorage = []; /* comme il n'y a pas d'array on le crée */
-                        produitEnregistreLocalStorage.push(proprietesProduit); /* on push l'objet proprietesProduit a la fin de produitEnregistreLocalStorage*/
-                        localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage)); /* on verrouille litem produit dans le localstorage */
-                    };
-
-                    function ajouterBoutLocalStorage() {
-                        produitEnregistreLocalStorage.push(proprietesProduit); /* on push l'objet proprietesProduit a la fin de produitEnregistreLocalStorage*/
-                        localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
-                    }
+                    let comparaisonCouleur = []; /* don't forget to clear */
+                    let comparaisonId = [];
 
                     if (produitEnregistreLocalStorage) {
                         /* /* si localstorage est présent donc le panier a au moins un élément */
+                        let canapTestId = id //modif description
 
                         for (let canapCompteur = 0; canapCompteur < produitEnregistreLocalStorage.length; canapCompteur++) {
                             /* boucle qui parcourt le localstorage */
-                            // console.log("hello mon canap");
-                            let canapTestId = id //modif description
-                            console.log("id de mon canapé : " + canapTestId);
-                            console.log("id du canapé panier: " + produitEnregistreLocalStorage[canapCompteur].idproduit);
-                            console.log("couleur de mon canapé : " + couleurValue);
-                            console.log("couleur du canapé panier : " + produitEnregistreLocalStorage[canapCompteur].couleurProduit);
-
-                            if (canapTestId === produitEnregistreLocalStorage[canapCompteur].idproduit && couleurValue === produitEnregistreLocalStorage[canapCompteur].couleurProduit) {
-                                console.log("c'est la meme couleur");
-                                console.log("***************************************")
-                                produitEnregistreLocalStorage[canapCompteur].quantiteProduit += quantiteProduitInt;
-                                localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
-                                confirmPopup();
-
-
-
-                            } else if (couleurValue !== produitEnregistreLocalStorage[canapCompteur].couleurProduit && canapTestId === produitEnregistreLocalStorage[canapCompteur].idproduit) {
-                                console.log("ce n'est pas la meme couleur : ");
-                                console.log("***************************************")
-                                ajouterBoutLocalStorage();
-                                confirmPopup()
-                                break;
-
-                            } else {
-                                ajouterBoutLocalStorage();
-                                confirmPopup()
-                                break;
-                            }
-
+                            comparaisonCouleur.push(produitEnregistreLocalStorage[canapCompteur].couleurProduit);
+                            comparaisonId.push(produitEnregistreLocalStorage[canapCompteur].idproduit);
                         } /* fin de la boucle for */
 
-                        // ajouterBoutLocalStorage();
+                        if (comparaisonId.includes(canapTestId) && comparaisonCouleur.includes(couleurValue)) {
+                            indexCanapé = comparaisonCouleur.findIndex(CouleurCanap => CouleurCanap === couleurValue); /* add && */
+                            if (comparaisonId[indexCanapé] == canapTestId) {
+                                produitEnregistreLocalStorage[indexCanapé].quantiteProduit += quantiteProduitInt;
+                                localStorage.setItem("produit", JSON.stringify(produitEnregistreLocalStorage));
+                                confirmPopup();
+                            }
+
+                        } else {
+                            ajouterBoutLocalStorage(proprietesProduit, produitEnregistreLocalStorage);
+                            confirmPopup();
+                        }
+
                     } else {
                         /* si localstorage n'est pas présent donc le panier est vide */
-                        // console.log("ca va pas")
-                        initialiserLocalStorage();
+                        initialiserLocalStorage(proprietesProduit);
                         confirmPopup();
                     };
                 }; /* fin de déclaration fonction mettreDansLeLocalStorage() */
-                mettreDansLeLocalStorage();
-            } else {
-                alert("Choisissiez un nombre entre 1 et 100");
+            }
 
-            }; /* fin du if interne quantité */
-        } else {
-            alert("Vous devez entrer un nombre entier");
-        }; /* fin du if externe quantité*/
-    }); /* fin du add event listener */
+        }
+
+    ); /* fin du add event listener */
 } /* fin de la fonction ajouterAuPanier */
