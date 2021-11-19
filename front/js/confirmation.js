@@ -9,6 +9,5 @@ function main() {
 
 
     document.querySelector("#orderId").textContent = idOrder; /* afficher l'order id */
-    localStorage.removeItem("orderId"); /*  on retire l'order id pour qu'elle ne soit pas stockée */
     localStorage.removeItem('produit'); /* on vide le local storage */
 }
